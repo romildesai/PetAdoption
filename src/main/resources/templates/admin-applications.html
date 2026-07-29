@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Adoption Applications</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #212529;
+            color: white;
+        }
+
+        .success-message {
+            color: #155724;
+            background-color: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .error-message {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .approve-button,
+        .reject-button {
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            width: 90px;
+        }
+
+        .approve-button {
+            background-color: #198754;
+        }
+
+        .reject-button {
+            background-color: #dc3545;
+        }
+
+        .status-pending {
+            color: #b8860b;
+            font-weight: bold;
+        }
+
+        .status-approved {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .status-rejected {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Adoption Applications</h1>
+
+    <div class="success-message"
+         th:if="${successMessage}"
+         th:text="${successMessage}">
+    </div>
+
+    <div class="error-message"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+    <p th:if="${#lists.isEmpty(applications)}">
+        No adoption applications were found.
+    </p>
+
+    <table th:unless="${#lists.isEmpty(applications)}">
+
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Applicant</th>
+            <th>Pet</th>
+            <th>Reason</th>
+            <th>Home Type</th>
+            <th>Other Pets</th>
+            <th>Pet Experience</th>
+            <th>Request Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="application : ${applications}">
+
+            <td th:text="${application.id}">
+                1
+            </td>
+
+            <td>
+                <strong th:text="${application.user.fullName}">
+                    User Name
+                </strong>
+
+                <br>
+
+                <span th:text="${application.user.email}">
+                    user@example.com
+                </span>
+            </td>
+
+            <td>
+                <strong th:text="${application.pet.name}">
+                    Pet Name
+                </strong>
+
+                <br>
+
+                <span th:text="${application.pet.species}">
+                    Dog
+                </span>
+
+                <span>-</span>
+
+                <span th:text="${application.pet.breed}">
+                    Labrador
+                </span>
+            </td>
+
+            <td th:text="${application.reasonForAdoption}">
+                Reason for adoption
+            </td>
+
+            <td th:text="${application.homeType}">
+                House
+            </td>
+
+            <td th:text="${application.hasOtherPets ? 'Yes' : 'No'}">
+                No
+            </td>
+
+            <td th:text="${application.experienceWithPets}">
+                Experience
+            </td>
+
+            <td th:text="${#temporals.format(
+                    application.requestDate,
+                    'MMM dd, yyyy HH:mm')}">
+                Date
+            </td>
+
+            <td>
+
+                <span th:if="${application.status.name() == 'PENDING'}"
+                      class="status-pending"
+                      th:text="${application.status}">
+                    PENDING
+                </span>
+
+                <span th:if="${application.status.name() == 'APPROVED'}"
+                      class="status-approved"
+                      th:text="${application.status}">
+                    APPROVED
+                </span>
+
+                <span th:if="${application.status.name() == 'REJECTED'}"
+                      class="status-rejected"
+                      th:text="${application.status}">
+                    REJECTED
+                </span>
+
+            </td>
+
+            <td>
+
+                <div th:if="${application.status.name() == 'PENDING'}">
+
+                    <form th:action="@{/admin/applications/{requestId}/approve(
+                                    requestId=${application.id})}"
+                          method="post">
+
+                        <button type="submit"
+                                class="approve-button"
+                                onclick="return confirm(
+                                'Are you sure you want to approve this application?')">
+                            Approve
+                        </button>
+
+                    </form>
+
+                    <form th:action="@{/admin/applications/{requestId}/reject(
+                                    requestId=${application.id})}"
+                          method="post">
+
+                        <button type="submit"
+                                class="reject-button"
+                                onclick="return confirm(
+                                'Are you sure you want to reject this application?')">
+                            Reject
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <span th:unless="${application.status.name() == 'PENDING'}">
+                    Completed
+                </span>
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

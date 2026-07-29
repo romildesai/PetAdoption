@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Adoption Applications</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #212529;
+            color: white;
+        }
+
+        .success-message {
+            color: #155724;
+            background-color: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .error-message {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .PENDING {
+            color: #b8860b;
+            font-weight: bold;
+        }
+
+        .APPROVED {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .REJECTED {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>My Adoption Applications</h1>
+
+    <div class="success-message"
+         th:if="${successMessage}"
+         th:text="${successMessage}">
+    </div>
+
+    <div class="error-message"
+         th:if="${errorMessage}"
+         th:text="${errorMessage}">
+    </div>
+
+    <p th:if="${#lists.isEmpty(applications)}">
+        You have not submitted any adoption applications.
+    </p>
+
+    <table th:unless="${#lists.isEmpty(applications)}">
+
+        <thead>
+        <tr>
+            <th>Application ID</th>
+            <th>Pet Name</th>
+            <th>Species</th>
+            <th>Breed</th>
+            <th>Request Date</th>
+            <th>Home Type</th>
+            <th>Other Pets</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="application : ${applications}">
+
+            <td th:text="${application.id}">
+                1
+            </td>
+
+            <td th:text="${application.pet.name}">
+                Pet Name
+            </td>
+
+            <td th:text="${application.pet.species}">
+                Dog
+            </td>
+
+            <td th:text="${application.pet.breed}">
+                Labrador
+            </td>
+
+            <td th:text="${#temporals.format(
+                    application.requestDate,
+                    'MMM dd, yyyy HH:mm')}">
+                Date
+            </td>
+
+            <td th:text="${application.homeType}">
+                House
+            </td>
+
+            <td th:text="${application.hasOtherPets ? 'Yes' : 'No'}">
+                No
+            </td>
+
+            <td>
+                <span th:text="${application.status}"
+                      th:class="${application.status.name()}">
+                    PENDING
+                </span>
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <a class="back-link"
+       th:href="@{/pets}">
+        Browse More Pets
+    </a>
+
+</div>
+
+</body>
+</html>
