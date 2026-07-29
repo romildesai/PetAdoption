@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Register</h2>
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+<form method="post" action="/petAdoption/user/register"
+      th:object="${user}">
+    <label>Full Name: <input type="text"
+                         th:field="*{fullName}" required /></label><br/>
+    <label>Phone Number: <input type="text"
+                         th:field="*{phone}" required /></label><br/>
+    <label>Email: <input type="email"
+                            th:field="*{email}" required /></label><br/>
+    <label>Password: <input type="password"
+                            th:field="*{password}" required /></label><br/>
+    <label>Address: <input type="text"
+                           th:field="*{address}" required /></label><br/>
+    <input type="submit" value="Register"/>
+</form>
+<p>
+    Already have an account?
+    <a th:href="@{/petAdoption/user/login}">Login</a>
+</p>
+</body>
+</html>
