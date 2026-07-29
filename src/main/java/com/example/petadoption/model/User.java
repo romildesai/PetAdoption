@@ -14,12 +14,13 @@ public class User {
     private String password;
     private String phone;
     private String address;
+    private String role;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,5 +64,11 @@ public class User {
         this.address = address;
     }
 
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

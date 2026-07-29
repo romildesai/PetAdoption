@@ -3,6 +3,7 @@ package com.example.petadoption.service;
 import com.example.petadoption.model.User;
 import com.example.petadoption.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,23 +14,17 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     //register
     public User registerUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
         return userRepository.save(user);
-    }
-
-    //login
-    public User loginUser(String email, String password) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isPresent()) {
-            if (user.get().getPassword().equals(password)) {
-                return user.get();
-            }
-        }
-        return null;
     }
 
     //get all users
@@ -42,5 +37,13 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    //find user by email
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
 
+    //search user by full name
+    public List<User> findByFullName(String fullName) {
+        return userRepository.findByFullNameContaining(fullName);
+    }
 }
