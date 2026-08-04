@@ -1,7 +1,6 @@
 package com.example.petadoption.controller;
 
-import com.example.petadoption.model.AdoptionRequest;
-import com.example.petadoption.model.AdoptionStatus;
+import com.example.petadoption.service.AdoptionHistoryService;
 import com.example.petadoption.service.AdoptionRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +19,8 @@ public class AdminController {
 
     @Autowired
     private AdoptionRequestService adoptionRequestService;
+    @Autowired
+    private AdoptionHistoryService adoptionHistoryService;
 
     //all adoption requests
     @GetMapping("/adoptionRequest")
@@ -47,7 +48,7 @@ public class AdminController {
     public String approveAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes){
         adoptionRequestService.approveRequest(id);
         redirectAttributes.addFlashAttribute("successMsg", "Adoption request approved successfully");
-        return "redirect:/adoptionRequest";
+        return "redirect:/petAdoption/admin/adoptionRequest";
 
     }
 
@@ -56,7 +57,21 @@ public class AdminController {
     public String rejectAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes){
        adoptionRequestService.rejectRequest(id);
        redirectAttributes.addFlashAttribute("successMsg", "Adoption request rejected");
-       return "redirect:/adoptionRequest";
+       return "redirect:/petAdoption/admin/adoptionRequest";
+    }
+
+    //view all history
+    @GetMapping("/adoption/history")
+    public String viewAdoptionHistory(Model m){
+        m.addAttribute("viewAdoptionHistory", adoptionHistoryService.getAllHistory());
+        return "adoption-history";
+    }
+
+    //view history by id
+    @GetMapping("/adoption/history/{id}")
+    public String viewAdoptionHistory(@PathVariable Long id ,Model m){
+        m.addAttribute("viewAdoptionHistory", adoptionHistoryService.getHistoryById(id));
+        return "adoption-history";
     }
 
 
