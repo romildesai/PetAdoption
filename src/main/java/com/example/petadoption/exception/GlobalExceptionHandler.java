@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
                 return url;
             }
         }
-        return "/error";
+        return "/petAdoption";
     }
 
 }

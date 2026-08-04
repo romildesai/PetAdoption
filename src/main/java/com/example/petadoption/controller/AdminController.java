@@ -1,5 +1,7 @@
 package com.example.petadoption.controller;
 
+import com.example.petadoption.model.AdoptionRequest;
+import com.example.petadoption.model.AdoptionStatus;
 import com.example.petadoption.service.AdoptionRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/petAdoption/admin")
@@ -41,11 +44,21 @@ public class AdminController {
 
     //approve adoption request
     @PostMapping("/adoptionRequest/{id}/approve")
-    public String approveAdoptionRequest(@PathVariable Long id)
+    public String approveAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        AdoptionRequest request = adoptionRequestService.getRequestById(id);
+        if (request == null) {
+            throw new IllegalArgumentException("Adoption request not found");
+        }
 
+        if (request.getStatus() != AdoptionStatus.PENDING) {
+            throw new IllegalStateException("This request has already been processed and cannot be approved again");
+        }
 
+        request.setStatus(AdoptionStatus.APPROVED);
+        adoptionRequestService.save(request);
 
-
-
+        redirectAttributes.addFlashAttribute("successMsg", "Adoption request approved successfully");
+        return "redirect:/adoptionRequest";
+        }
 
 }
