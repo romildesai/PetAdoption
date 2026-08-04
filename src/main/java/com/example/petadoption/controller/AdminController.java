@@ -44,21 +44,20 @@ public class AdminController {
 
     //approve adoption request
     @PostMapping("/adoptionRequest/{id}/approve")
-    public String approveAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        AdoptionRequest request = adoptionRequestService.getRequestById(id);
-        if (request == null) {
-            throw new IllegalArgumentException("Adoption request not found");
-        }
-
-        if (request.getStatus() != AdoptionStatus.PENDING) {
-            throw new IllegalStateException("This request has already been processed and cannot be approved again");
-        }
-
-        request.setStatus(AdoptionStatus.APPROVED);
-        adoptionRequestService.save(request);
-
+    public String approveAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes){
+        adoptionRequestService.approveRequest(id);
         redirectAttributes.addFlashAttribute("successMsg", "Adoption request approved successfully");
         return "redirect:/adoptionRequest";
-        }
+
+    }
+
+    //reject adoption request
+    @PostMapping("/adoptionRequest/{id}/reject")
+    public String rejectAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes){
+       adoptionRequestService.rejectRequest(id);
+       redirectAttributes.addFlashAttribute("successMsg", "Adoption request rejected");
+       return "redirect:/adoptionRequest";
+    }
+
 
 }
