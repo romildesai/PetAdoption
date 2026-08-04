@@ -47,7 +47,7 @@ public class AdminController {
     @PostMapping("/adoptionRequest/{id}/approve")
     public String approveAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes){
         adoptionRequestService.approveRequest(id);
-        redirectAttributes.addFlashAttribute("successMsg", "Adoption request approved successfully");
+        redirectAttributes.addFlashAttribute("successMessage", "Adoption request approved successfully");
         return "redirect:/petAdoption/admin/adoptionRequest";
 
     }
@@ -56,7 +56,7 @@ public class AdminController {
     @PostMapping("/adoptionRequest/{id}/reject")
     public String rejectAdoptionRequest(@PathVariable Long id, RedirectAttributes redirectAttributes){
        adoptionRequestService.rejectRequest(id);
-       redirectAttributes.addFlashAttribute("successMsg", "Adoption request rejected");
+       redirectAttributes.addFlashAttribute("successMessage", "Adoption request rejected");
        return "redirect:/petAdoption/admin/adoptionRequest";
     }
 
