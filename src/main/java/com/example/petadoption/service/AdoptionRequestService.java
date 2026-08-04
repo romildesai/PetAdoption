@@ -225,4 +225,9 @@ public class AdoptionRequestService {
                 adoptionRequest
         );
     }
+
+    //save request for admin controller
+    public void save(AdoptionRequest request) {
+        adoptionRequestRepository.save(request);
+    }
 }
