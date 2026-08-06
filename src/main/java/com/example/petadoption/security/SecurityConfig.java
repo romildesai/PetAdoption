@@ -29,12 +29,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/petAdoption/user/register", "/css/**").permitAll()
-                        .requestMatchers("/petAdoption/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
+            .authorizeHttpRequests(auth -> auth
+                //public routes
+                .requestMatchers(
+                    "/",
+                    "/pets/**",
+                    "/petAdoption/user/register",
+                    "/petAdoption/user/login",
+                    "/css/**",
+                    "/js/**",
+                    "/images/**"
+                ).permitAll()
+                //Admin routAll
+                .requestMatchers(
+                    "/admin/**",
+                    "/petAdoption/admin/**").hasRole("ADMIN")
+                //User and Admin routes
+                .requestMatchers(
+                    "/petAdoption/user/",
+                    "/petAdoption/user/applications",
+                    "/petAdoption/user/history",
+                    "/user/applications",
+                    "/user/history",
+                    "/adoptions/**"
+                    ).hasAnyRole("USER", "ADMIN")
+                //All other routes require login
+                .anyRequest()
+                .authenticated()
+            )
+
 // Hook your custom user service
                 .userDetailsService(userDetailsService)
                 .formLogin(form -> form
