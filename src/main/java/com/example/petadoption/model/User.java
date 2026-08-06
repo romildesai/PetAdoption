@@ -1,6 +1,10 @@
 package com.example.petadoption.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.hibernate.usertype.UserType;
 
 
 @Entity
@@ -9,12 +13,30 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "Full name is required")
+    @Column(nullable = false)
     private String fullName;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Enter a valid email address")
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must contain at least 6 characters")
+    @Column(nullable = false)
     private String password;
+
+    @NotBlank(message = "Phone number is required")
     private String phone;
+
+    @NotBlank(message = "Address is required")
     private String address;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
 
     public Long getId() {
         return id;
@@ -64,11 +86,11 @@ public class User {
         this.address = address;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 }

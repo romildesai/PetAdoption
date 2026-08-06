@@ -2,23 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create Account | Pet Adoption</title>
 </head>
 <body>
 <h2>Register</h2>
 <p th:if="${error}" th:text="${error}" style="color:red;"></p>
-<form method="post" action="/petAdoption/user/register"
+<form method="post" th:action="@{/petAdoption/user/register}"
       th:object="${user}">
-    <label>Full Name: <input type="text"
-                         th:field="*{fullName}" required /></label><br/>
-    <label>Phone Number: <input type="text"
-                         th:field="*{phone}" required /></label><br/>
-    <label>Email: <input type="email"
-                            th:field="*{email}" required /></label><br/>
-    <label>Password: <input type="password"
-                            th:field="*{password}" required /></label><br/>
-    <label>Address: <input type="text"
-                           th:field="*{address}" required /></label><br/>
+    <label>Full Name:
+        <input type="text" th:field="*{fullName}" />
+        <span th:if="${#fields.hasErrors('fullName')}"
+              th:errors="*{fullName}">
+        </span>
+    </label><br/>
+    <label>Phone Number:
+        <input type="text" th:field="*{phone}" />
+        <span th:if="${#fields.hasErrors('phone')}"
+              th:errors="*{phone}">
+        </span>
+    </label><br/>
+    <label>Email:
+        <input type="email" th:field="*{email}" />
+        <span th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}">
+        </span>
+    </label><br/>
+    <label>Password:
+        <input type="password" th:field="*{password}" />
+        <span th:if="${#fields.hasErrors('password')}"
+              th:errors="*{password}">
+        </span>
+    </label><br/>
+    <label>Address:
+        <input type="text" th:field="*{address}" />
+        <span th:if="${#fields.hasErrors('address')}"
+              th:errors="*{address}">
+        </span>
+    </label><br/>
     <input type="submit" value="Register"/>
 </form>
 <p>

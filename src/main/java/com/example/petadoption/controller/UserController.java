@@ -1,12 +1,14 @@
 package com.example.petadoption.controller;
 
 import com.example.petadoption.model.User;
-import com.example.petadoption.repository.UserRepository;
+import com.example.petadoption.service.AdoptionHistoryService;
+import com.example.petadoption.service.AdoptionRequestService;
 import com.example.petadoption.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +16,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/petAdoption/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final AdoptionHistoryService adoptionHistoryService;
+    private final AdoptionRequestService adoptionRequestService;
+
+    public UserController(UserService userService, AdoptionHistoryService adoptionHistoryService, AdoptionRequestService adoptionRequestService) {
+        this.userService = userService;
+        this.adoptionHistoryService = adoptionHistoryService;
+        this.adoptionRequestService = adoptionRequestService;
+    }
 
     //login
     @GetMapping("/login")
@@ -30,6 +37,9 @@ public class UserController {
     @GetMapping("/")
     public String home(Authentication authentication, Model model) {
         User user = userService.findByEmail(authentication.getName());
+        if (user == null) {
+            return "redirect:/petAdoption/user/login";
+        }
         model.addAttribute("user", user);
         return "home";
     }
@@ -42,32 +52,33 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
-        //check email exist
-        User registeredUser = userService.findByEmail(user.getEmail());
-        if (registeredUser != null) {
-            model.addAttribute("error", "Email already in use");
+    public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return "register";
         }
-        //save new register user
-        userService.registerUser(user);
-        return "redirect:/petAdoption/user/login";
+        //check email exist
+        try {
+            userService.registerUser(user);
+            return "redirect:/petAdoption/user/login";
+        } catch(IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
+        }
     }
 
-    //get all users
-    @GetMapping("/search/users")
-    public String findAllUsers(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-        return "users";
+    //View their own adoption history
+    @GetMapping("/history")
+    public String history(Authentication authentication, Model model) {
+        User user = userService.findByEmail(authentication.getName());
+        model.addAttribute("history", adoptionHistoryService.getHistoryByUser(user.getId()));
+        return "adoption-history";
     }
 
-    //find user by full name
-    @GetMapping("/search")
-    public String findUserByFullName(@RequestParam String fullName, Model model) {
-        List<User> users = userService.findByFullName(fullName);
-        model.addAttribute("users", users);
-        return "user-details";
+    //View their own applications
+    @GetMapping("/applications")
+    public String applications(Authentication authentication, Model model) {
+        User user = userService.findByEmail(authentication.getName());
+        model.addAttribute("applications", adoptionRequestService.getRequestsByUser(user.getId()));
+        return "my-applications";
     }
-
 }
