@@ -1,5 +1,8 @@
 package com.example.petadoption.controller;
 
+import com.example.petadoption.model.Pet;
+import com.example.petadoption.service.PetService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,15 +47,9 @@ public class PetController {
 
     @GetMapping("/pets/search")
     public String searchPets(
-            @RequestParam(required = false)
-            String species,
-
-            @RequestParam(required = false)
-            String breed,
-
-            @RequestParam(required = false)
-            Integer age,
-
+            @RequestParam(required = false) String species,
+            @RequestParam(required = false) String breed,
+            @RequestParam(required = false) Integer age,
             Model model) {
 
         model.addAttribute(

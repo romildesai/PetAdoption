@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Pets</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: white;
+            padding: 15px 30px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .search-box input {
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .search-box button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .pets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .pet-card {
+            background: white;
+            width: 260px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .pet-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .pet-card a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <a th:href="@{/petAdoption/user/}">Home</a>
+    <a th:href="@{/pets}">Pets</a>
+    <a th:href="@{/petAdoption/user/applications}">My Applications</a>
+    <a th:href="@{/petAdoption/user/history}">History</a>
+</div>
+
+<div class="container">
+
+    <h1>Available Pets</h1>
+
+    <div class="search-box">
+
+        <form th:action="@{/pets/search}" method="get">
+
+            <input type="text"
+                   name="species"
+                   placeholder="Species"
+                   th:value="${species}">
+
+            <input type="text"
+                   name="breed"
+                   placeholder="Breed"
+                   th:value="${breed}">
+
+            <input type="number"
+                   name="age"
+                   placeholder="Age"
+                   th:value="${age}">
+
+            <button type="submit">Search</button>
+
+            <a th:href="@{/pets}">Clear</a>
+
+        </form>
+
+    </div>
+
+    <div class="pets">
+
+        <div class="pet-card"
+             th:each="pet : ${pets}">
+
+            <img th:if="${pet.imageUrl != null}"
+                 th:src="${pet.imageUrl}"
+                 alt="Pet Image">
+
+            <h2 th:text="${pet.name}">Pet Name</h2>
+
+            <p>
+                <strong>Species:</strong>
+                <span th:text="${pet.species}"></span>
+            </p>
+
+            <p>
+                <strong>Breed:</strong>
+                <span th:text="${pet.breed}"></span>
+            </p>
+
+            <p>
+                <strong>Age:</strong>
+                <span th:text="${pet.age}"></span>
+            </p>
+
+            <p>
+                <strong>Gender:</strong>
+                <span th:text="${pet.gender}"></span>
+            </p>
+
+            <a th:href="@{/pets/{id}(id=${pet.id})}">
+                View Details
+            </a>
+
+        </div>
+
+    </div>
+
+    <p th:if="${#lists.isEmpty(pets)}"
+       style="text-align:center;">
+        No pets found.
+    </p>
+
+</div>
+
+</body>
+</html>

@@ -1,226 +1,433 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Pet Adoption Application</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 30px;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .pet-information {
-            background-color: #eef6ff;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 10px;
+        * {
             box-sizing: border-box;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
+            margin: 0;
+            padding: 0;
         }
 
-        textarea {
-            min-height: 100px;
-            resize: vertical;
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f6f8fb;
+            color: #333;
         }
 
-        button {
-            margin-top: 20px;
-            padding: 12px 20px;
-            background-color: #198754;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .navbar {
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
-        button:hover {
-            background-color: #146c43;
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #2d6a4f;
         }
 
-        .error-message {
-            color: #dc3545;
-            background-color: #f8d7da;
-            padding: 10px;
-            border-radius: 5px;
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            margin-left: 25px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #2d6a4f;
+        }
+
+        .page-container {
+            display: flex;
+            justify-content: center;
+            padding: 50px 20px;
+        }
+
+        .adoption-card {
+            width: 100%;
+            max-width: 850px;
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.10);
+        }
+
+        .adoption-card h1 {
+            text-align: center;
+            color: #2d6a4f;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .pet-info {
+            background: #edf7f1;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .pet-icon {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: #2d6a4f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+        }
+
+        .pet-details {
+            flex: 1;
+        }
+
+        .pet-details h2 {
+            color: #2d6a4f;
             margin-bottom: 15px;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 15px;
+        .pet-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .pet-grid div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+        .available {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d5d5d5;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background-color: white;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #2d6a4f;
+            box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.1);
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .submit-button {
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .submit-button:hover {
+            background: #22543d;
+        }
+
+        .back-button {
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #e9ecef;
+            color: #333;
+        }
+
+        .back-button:hover {
+            background: #dcdfe2;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #842029;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links a {
+                margin-left: 10px;
+                font-size: 14px;
+            }
+
+            .adoption-card {
+                padding: 22px;
+            }
+
+            .pet-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pet-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .submit-button,
+            .back-button {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
-
-    <h1>Pet Adoption Application</h1>
-
-    <div class="error-message"
-         th:if="${errorMessage}"
-         th:text="${errorMessage}">
+<nav class="navbar">
+    <div class="logo">
+        🐾 Pet Adoption
     </div>
 
-    <div class="pet-information" th:if="${pet != null}">
+    <div class="nav-links">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/pets}">Available Pets</a>
+    </div>
+</nav>
 
-        <h2 th:text="${pet.name}">
-            Pet Name
-        </h2>
+<div class="page-container">
 
-        <p>
-            <strong>Species:</strong>
-            <span th:text="${pet.species}">
-                Dog
-            </span>
+    <div class="adoption-card">
+
+        <h1>Adoption Application</h1>
+
+        <p class="subtitle">
+            Give a loving pet a forever home.
         </p>
 
-        <p>
-            <strong>Breed:</strong>
-            <span th:text="${pet.breed}">
-                Labrador
-            </span>
-        </p>
+        <div class="error-message"
+             th:if="${errorMessage}"
+             th:text="${errorMessage}">
+        </div>
 
-        <p>
-            <strong>Age:</strong>
-            <span th:text="${pet.age}">
-                3
-            </span>
-        </p>
+        <div class="pet-info"
+             th:if="${pet != null}">
 
-        <p>
-            <strong>Status:</strong>
-            <span th:text="${pet.status}">
-                AVAILABLE
-            </span>
-        </p>
+            <div class="pet-icon">
+                🐾
+            </div>
+
+            <div class="pet-details">
+
+                <h2 th:text="${pet.name}">
+                    Pet Name
+                </h2>
+
+                <div class="pet-grid">
+
+                    <div>
+                        <span class="label">Species</span>
+                        <span th:text="${pet.species}">Dog</span>
+                    </div>
+
+                    <div>
+                        <span class="label">Breed</span>
+                        <span th:text="${pet.breed}">Labrador</span>
+                    </div>
+
+                    <div>
+                        <span class="label">Age</span>
+                        <span th:text="${pet.age}">3</span>
+                    </div>
+
+                    <div>
+                        <span class="label">Status</span>
+                        <span class="available"
+                              th:text="${pet.status}">
+                            AVAILABLE
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <form th:action="@{/adoptions}"
+              method="post">
+
+            <input type="hidden"
+                   name="userId"
+                   value="1">
+
+            <input type="hidden"
+                   name="petId"
+                   th:value="${pet.id}">
+
+            <div class="form-group">
+                <label for="reasonForAdoption">
+                    Why do you want to adopt this pet?
+                </label>
+
+                <textarea
+                        id="reasonForAdoption"
+                        name="reasonForAdoption"
+                        placeholder="Tell us why you would like to adopt this pet..."
+                        minlength="10"
+                        required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="homeType">
+                    What type of home do you live in?
+                </label>
+
+                <select id="homeType"
+                        name="homeType"
+                        required>
+
+                    <option value="">
+                        Select Home Type
+                    </option>
+
+                    <option value="Apartment">
+                        Apartment
+                    </option>
+
+                    <option value="Condo">
+                        Condo
+                    </option>
+
+                    <option value="House">
+                        House
+                    </option>
+
+                    <option value="Townhouse">
+                        Townhouse
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="hasOtherPets">
+                    Do you currently have other pets?
+                </label>
+
+                <select id="hasOtherPets"
+                        name="hasOtherPets"
+                        required>
+
+                    <option value="">
+                        Select an option
+                    </option>
+
+                    <option value="true">
+                        Yes
+                    </option>
+
+                    <option value="false">
+                        No
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="experienceWithPets">
+                    Experience with pets
+                </label>
+
+                <textarea
+                        id="experienceWithPets"
+                        name="experienceWithPets"
+                        placeholder="Tell us about your previous experience with pets..."></textarea>
+            </div>
+
+            <div class="form-buttons">
+
+                <a th:href="@{/pets}"
+                   class="back-button">
+                    ← Back to Pets
+                </a>
+
+                <button type="submit"
+                        class="submit-button">
+                    Submit Application
+                </button>
+
+            </div>
+
+        </form>
 
     </div>
-
-    <form th:action="@{/adoptions}" method="post">
-
-        <!-- Temporary user ID -->
-        <input type="hidden"
-               name="userId"
-               value="1">
-
-        <input type="hidden"
-               name="petId"
-               th:value="${pet.id}">
-
-        <label for="reasonForAdoption">
-            Why do you want to adopt this pet?
-        </label>
-
-        <textarea id="reasonForAdoption"
-                  name="reasonForAdoption"
-                  placeholder="Explain why you want to adopt this pet"
-                  minlength="10"
-                  required></textarea>
-
-        <label for="homeType">
-            What type of home do you live in?
-        </label>
-
-        <select id="homeType"
-                name="homeType"
-                required>
-
-            <option value="">
-                Select your home type
-            </option>
-
-            <option value="Apartment">
-                Apartment
-            </option>
-
-            <option value="Condo">
-                Condo
-            </option>
-
-            <option value="House">
-                House
-            </option>
-
-            <option value="Townhouse">
-                Townhouse
-            </option>
-
-        </select>
-
-        <label for="hasOtherPets">
-            Do you currently have other pets?
-        </label>
-
-        <select id="hasOtherPets"
-                name="hasOtherPets"
-                required>
-
-            <option value="">
-                Select an option
-            </option>
-
-            <option value="true">
-                Yes
-            </option>
-
-            <option value="false">
-                No
-            </option>
-
-        </select>
-
-        <label for="experienceWithPets">
-            Describe your experience with pets
-        </label>
-
-        <textarea id="experienceWithPets"
-                  name="experienceWithPets"
-                  placeholder="Describe any previous experience with pets"></textarea>
-
-        <button type="submit">
-            Submit Adoption Request
-        </button>
-
-    </form>
-
-    <a class="back-link"
-       th:href="@{/pets}">
-        Back to Pets
-    </a>
 
 </div>
+
+<footer>
+    <p>🐾 Pet Adoption System</p>
+</footer>
 
 </body>
 </html>

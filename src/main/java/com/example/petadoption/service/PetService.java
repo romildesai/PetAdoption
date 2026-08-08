@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.petadoption.model.Pet;
 import com.example.petadoption.model.PetStatus;
+import com.example.petadoption.repository.PetRepository;
 
 @Service
 public class PetService {

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Details</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+
+        .container {
+            width: 70%;
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 18px;
+            margin-top: 15px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <img th:if="${pet.imageUrl != null}"
+         th:src="${pet.imageUrl}"
+         alt="Pet Image">
+
+    <h1 th:text="${pet.name}">Pet Name</h1>
+
+    <p>
+        <strong>Species:</strong>
+        <span th:text="${pet.species}"></span>
+    </p>
+
+    <p>
+        <strong>Breed:</strong>
+        <span th:text="${pet.breed}"></span>
+    </p>
+
+    <p>
+        <strong>Age:</strong>
+        <span th:text="${pet.age}"></span>
+    </p>
+
+    <p>
+        <strong>Gender:</strong>
+        <span th:text="${pet.gender}"></span>
+    </p>
+
+    <p>
+        <strong>Description:</strong>
+        <span th:text="${pet.description}"></span>
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span th:text="${pet.status}"></span>
+    </p>
+
+    <a class="button"
+       th:href="@{/adoptions/new/{id}(id=${pet.id})}">
+        Adopt This Pet
+    </a>
+
+    <a class="button"
+       th:href="@{/pets}">
+        Back to Pets
+    </a>
+
+</div>
+
+</body>
+</html>

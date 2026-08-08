@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.petadoption.model.Pet;
 import com.example.petadoption.model.PetStatus;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
@@ -28,5 +29,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
             @Param("species") String species,
             @Param("breed") String breed,
             @Param("age") Integer age,
-            @Param("status") PetStatus status);
+            @Param("status") PetStatus status
+    );
 }
