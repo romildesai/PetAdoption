@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<nav class="navbar" th:fragment="navbar">
+    <div class="logo">PetAdoption</div>
+
+    <div class="nav-links">
+        <a th:href="@{/petAdoption/user/}">Home</a>
+        <a th:href="@{/pets}">Pets</a>
+        <a th:href="@{/petAdoption/user/applications}">My Applications</a>
+        <a th:href="@{/petAdoption/user/history}">History</a>
+    </div>
+</nav>
+
+</body>
+</html>
