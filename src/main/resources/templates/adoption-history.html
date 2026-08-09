@@ -5,112 +5,89 @@
 <head>
     <meta charset="UTF-8">
     <title>Adoption History</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            padding: 30px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #dddddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #212529;
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
 
-<div class="container">
+<div th:replace="~{navbar :: navbar}"></div>
 
-    <h1>Adoption History</h1>
+<div class="content-wrapper">
 
-    <p th:if="${#lists.isEmpty(history)}">
-        No completed adoption records were found.
-    </p>
+    <div class="admin-container">
+        <div class="admin-header">
 
-    <table th:unless="${#lists.isEmpty(history)}">
+            <h1>Adoption History</h1>
 
-        <thead>
-        <tr>
-            <th>History ID</th>
-            <th>Pet Name</th>
-            <th>Species</th>
-            <th>Breed</th>
-            <th>Adopter Name</th>
-            <th>Email</th>
-            <th>Adoption Date</th>
-            <th>Application ID</th>
-        </tr>
-        </thead>
+            <p th:if="${#lists.isEmpty(history)}">
+                No completed adoption records were found.
+            </p>
 
-        <tbody>
+            <table th:unless="${#lists.isEmpty(history)}">
 
-        <tr th:each="record : ${history}">
+                <thead>
+                <tr>
+                    <th>History ID</th>
+                    <th>Pet Name</th>
+                    <th>Species</th>
+                    <th>Breed</th>
+                    <th>Adopter Name</th>
+                    <th>Email</th>
+                    <th>Adoption Date</th>
+                    <th>Application ID</th>
+                </tr>
+                </thead>
 
-            <td th:text="${record.id}">
-                1
-            </td>
+                <tbody>
 
-            <td th:text="${record.pet.name}">
-                Pet Name
-            </td>
+                <tr th:each="record : ${history}">
 
-            <td th:text="${record.pet.species}">
-                Dog
-            </td>
+                    <td th:text="${record.id}">
+                        1
+                    </td>
 
-            <td th:text="${record.pet.breed}">
-                Labrador
-            </td>
+                    <td th:text="${record.pet.name}">
+                        Pet Name
+                    </td>
 
-            <td th:text="${record.user.fullName}">
-                User Name
-            </td>
+                    <td th:text="${record.pet.species}">
+                        Dog
+                    </td>
 
-            <td th:text="${record.user.email}">
-                user@example.com
-            </td>
+                    <td th:text="${record.pet.breed}">
+                        Labrador
+                    </td>
 
-            <td th:text="${#temporals.format(
+                    <td th:text="${record.user.fullName}">
+                        User Name
+                    </td>
+
+                    <td th:text="${record.user.email}">
+                        user@example.com
+                    </td>
+
+                    <td th:text="${#temporals.format(
                     record.adoptionDate,
                     'MMM dd, yyyy')}">
-                Date
-            </td>
+                        Date
+                    </td>
 
-            <td th:text="${record.adoptionRequest.id}">
-                1
-            </td>
+                    <td th:text="${record.adoptionRequest.id}">
+                        1
+                    </td>
 
-        </tr>
+                </tr>
 
-        </tbody>
+                </tbody>
 
-    </table>
+            </table>
 
+        </div>
+    </div>
 </div>
+
+<div th:replace="~{footer :: footer}"></div>
 
 </body>
 </html>
