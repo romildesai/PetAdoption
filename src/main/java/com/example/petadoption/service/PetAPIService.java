@@ -5,19 +5,13 @@ import com.example.petadoption.model.PetStatus;
 import com.example.petadoption.repository.PetRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 @Service
 public class PetAPIService {
@@ -25,11 +19,29 @@ public class PetAPIService {
     private final PetRepository petRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${rescuegroups.api.url}")
-    private String apiUrl;
+    private static final String API_URL =
+            "https://dog.ceo/api/breeds/image/random/20";
 
-    @Value("${rescuegroups.api.key}")
-    private String apiKey;
+    private final Random random = new Random();
+
+    private final List<String> names = List.of(
+            "Buddy",
+            "Max",
+            "Charlie",
+            "Rocky",
+            "Cooper",
+            "Milo",
+            "Teddy",
+            "Bailey",
+            "Leo",
+            "Lucky",
+            "Daisy",
+            "Luna",
+            "Bella",
+            "Lucy",
+            "Molly",
+            "Ruby"
+    );
 
     public PetAPIService(PetRepository petRepository) {
         this.petRepository = petRepository;
@@ -38,30 +50,9 @@ public class PetAPIService {
 
     public List<Pet> fetchPets() {
 
-        String url = apiUrl
-                + "/public/animals/search/available/haspic/"
-                + "?limit=25&include=species";
-
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.set(
-                HttpHeaders.CONTENT_TYPE,
-                "application/vnd.api+json"
-        );
-
-        headers.set(
-                HttpHeaders.AUTHORIZATION,
-                apiKey
-        );
-
-        HttpEntity<Void> request =
-                new HttpEntity<>(headers);
-
         ResponseEntity<JsonNode> response =
-                restTemplate.exchange(
-                        url,
-                        HttpMethod.GET,
-                        request,
+                restTemplate.getForEntity(
+                        API_URL,
                         JsonNode.class
                 );
 
@@ -73,62 +64,29 @@ public class PetAPIService {
             return pets;
         }
 
-        Map<String, String> speciesMap =
-                getSpecies(body);
+        JsonNode images = body.path("message");
 
-        for (JsonNode animal : body.path("data")) {
+        for (JsonNode image : images) {
 
-            JsonNode attributes =
-                    animal.path("attributes");
+            String imageUrl = image.asText();
 
-            String speciesId =
-                    animal.path("relationships")
-                            .path("species")
-                            .path("data")
-                            .path("id")
-                            .asText();
+            String breed = getBreedFromImageUrl(imageUrl);
 
-            String species =
-                    speciesMap.get(speciesId);
+            String name = generateName();
 
             Pet pet = new Pet();
 
-            pet.setName(
-                    getText(attributes, "name")
-            );
-
-            pet.setSpecies(species);
-
-            pet.setBreed(
-                    getText(attributes, "breedPrimary")
-            );
-
-            pet.setAge(
-                    convertAge(
-                            getText(
-                                    attributes,
-                                    "ageString"
-                            )
-                    )
-            );
-
-            pet.setGender(
-                    getText(attributes, "sex")
-            );
+            pet.setName(name);
+            pet.setSpecies("Dog");
+            pet.setBreed(breed);
+            pet.setAge(generateAge());
+            pet.setGender(generateGender());
 
             pet.setDescription(
-                    getText(
-                            attributes,
-                            "descriptionText"
-                    )
+                    generateDescription(name, breed)
             );
 
-            pet.setImageUrl(
-                    getText(
-                            attributes,
-                            "pictureThumbnailUrl"
-                    )
-            );
+            pet.setImageUrl(imageUrl);
 
             pet.setStatus(PetStatus.AVAILABLE);
 
@@ -148,81 +106,62 @@ public class PetAPIService {
         }
     }
 
-    private Map<String, String> getSpecies(
-            JsonNode body) {
+    private String getBreedFromImageUrl(String imageUrl) {
 
-        Map<String, String> speciesMap =
-                new HashMap<>();
+        String breedPart =
+                imageUrl.split("/breeds/")[1]
+                        .split("/")[0];
 
-        for (JsonNode item : body.path("included")) {
+        breedPart = breedPart.replace("-", " ");
 
-            if (item.path("type")
-                    .asText()
-                    .equals("species")) {
+        String[] words = breedPart.split(" ");
 
-                String id =
-                        item.path("id").asText();
+        StringBuilder breed = new StringBuilder();
 
-                String species =
-                        item.path("attributes")
-                                .path("singular")
-                                .asText();
+        for (String word : words) {
 
-                speciesMap.put(id, species);
-            }
+            breed.append(
+                    Character.toUpperCase(
+                            word.charAt(0)
+                    )
+            );
+
+            breed.append(word.substring(1));
+
+            breed.append(" ");
         }
 
-        return speciesMap;
+        return breed.toString().trim();
     }
 
-    private String getText(
-            JsonNode attributes,
-            String field) {
+    private String generateName() {
 
-        JsonNode value = attributes.get(field);
-
-        if (value == null || value.isNull()) {
-            return null;
-        }
-
-        return value.asText();
+        return names.get(
+                random.nextInt(names.size())
+        );
     }
 
-    private Integer convertAge(String ageString) {
+    private Integer generateAge() {
 
-        if (ageString == null ||
-                ageString.isBlank()) {
+        return random.nextInt(10) + 1;
+    }
 
-            return null;
+    private String generateGender() {
+
+        if (random.nextBoolean()) {
+            return "Male";
         }
 
-        String lower =
-                ageString.toLowerCase();
+        return "Female";
+    }
 
-        String[] parts =
-                lower.split(" ");
+    private String generateDescription(
+            String name,
+            String breed) {
 
-        for (int i = 0;
-             i < parts.length - 1;
-             i++) {
-
-            if (parts[i + 1]
-                    .startsWith("year")) {
-
-                try {
-                    return Integer.parseInt(
-                            parts[i]
-                    );
-                } catch (NumberFormatException e) {
-                    return null;
-                }
-            }
-        }
-
-        if (lower.contains("month")) {
-            return 0;
-        }
-
-        return null;
+        return name
+                + " is a friendly "
+                + breed
+                + " looking for a loving home.";
     }
 }
