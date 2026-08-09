@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Admin</title>
+    <title>Pet Adoption - Admin</title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <h1>Admin - Adoption Requests</h1>
 
@@ -21,7 +26,12 @@
 <!-- All requests table -->
 <table th:if="${viewRequest}" border="1">
     <tr>
-        <th>ID</th><th>User</th><th>Pet</th><th>Status</th><th>Date</th><th>Action</th>
+        <th>ID</th>
+        <th>User</th>
+        <th>Pet</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Action</th>
     </tr>
     <tr th:each="req : ${viewRequest}">
         <td th:text="${req.id}"></td>
@@ -47,7 +57,11 @@
 <!-- Pending requests table (same structure) -->
 <table th:if="${viewPendingRequest}" border="1">
     <tr>
-        <th>ID</th><th>User</th><th>Pet</th><th>Date</th><th>Action</th>
+        <th>ID</th>
+        <th>User</th>
+        <th>Pet</th>
+        <th>Date</th>
+        <th>Action</th>
     </tr>
     <tr th:each="req : ${viewPendingRequest}">
         <td th:text="${req.id}"></td>
@@ -55,10 +69,12 @@
         <td th:text="${req.pet.name}"></td>
         <td th:text="${req.requestDate}"></td>
         <td>
-            <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}" method="post" style="display:inline;">
+            <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}" method="post"
+                  style="display:inline;">
                 <button type="submit">Approve</button>
             </form>
-            <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/reject(id=${req.id})}" method="post" style="display:inline;">
+            <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/reject(id=${req.id})}" method="post"
+                  style="display:inline;">
                 <button type="submit">Reject</button>
             </form>
         </td>
@@ -71,6 +87,10 @@
     <p>Status: <span th:text="${viewRequestById.status}"></span></p>
     <p>Reason: <span th:text="${viewRequestById.reasonForAdoption}"></span></p>
 </div>
+
+<footer>
+    <div th:replace="~{footer :: footer}"></div>
+</footer>
 
 </body>
 </html>
