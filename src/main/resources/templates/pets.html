@@ -85,11 +85,51 @@
 
 <body>
 
+<!--<div class="navbar">-->
+<!--    <a th:href="@{/petAdoption/user/}">Home</a>-->
+<!--    <a th:href="@{/pets}">Pets</a>-->
+<!--    <a th:href="@{/petAdoption/user/applications}">My Applications</a>-->
+<!--    <a th:href="@{/petAdoption/user/history}">History</a>-->
+<!--</div>-->
+
 <div class="navbar">
-    <a th:href="@{/petAdoption/user/}">Home</a>
+
+    <!-- Visitor -->
+    <a sec:authorize="isAnonymous()"
+       th:href="@{/}">
+        Home
+    </a>
+
+    <!-- Logged-in user -->
+    <a sec:authorize="isAuthenticated()"
+       th:href="@{/petAdoption/user/}">
+        Home
+    </a>
+
     <a th:href="@{/pets}">Pets</a>
-    <a th:href="@{/petAdoption/user/applications}">My Applications</a>
-    <a th:href="@{/petAdoption/user/history}">History</a>
+
+    <!-- Visitor links -->
+    <a sec:authorize="isAnonymous()"
+       th:href="@{/petAdoption/user/login}">
+        Login
+    </a>
+
+    <a sec:authorize="isAnonymous()"
+       th:href="@{/petAdoption/user/register}">
+        Register
+    </a>
+
+    <!-- Logged-in user links -->
+    <a sec:authorize="isAuthenticated()"
+       th:href="@{/petAdoption/user/applications}">
+        My Applications
+    </a>
+
+    <a sec:authorize="isAuthenticated()"
+       th:href="@{/petAdoption/user/history}">
+        History
+    </a>
+
 </div>
 
 <div class="container">

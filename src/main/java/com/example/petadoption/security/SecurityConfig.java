@@ -66,7 +66,21 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .failureUrl("/petAdoption/user/login?error")
-                        .defaultSuccessUrl("/petAdoption/user/", true)
+                        //.defaultSuccessUrl("/petAdoption/user/", true)
+                        .successHandler((request, response, authentication) -> {
+                            boolean isAdmin = authentication.getAuthorities()
+                                    .stream()
+                                    .anyMatch(a ->
+                                            a.getAuthority().equals("ROLE_ADMIN"));
+
+                            if (isAdmin) {
+                                response.sendRedirect(
+                                        "/petAdoption/admin/adoptionRequest");
+                            } else {
+                                response.sendRedirect(
+                                        "/petAdoption/user/");
+                            }
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout

@@ -70,6 +70,9 @@ public class UserController {
     @GetMapping("/history")
     public String history(Authentication authentication, Model model) {
         User user = userService.findByEmail(authentication.getName());
+        if (user == null) {
+            return "redirect:/petAdoption/user/login";
+        }
         model.addAttribute("history", adoptionHistoryService.getHistoryByUser(user.getId()));
         return "adoption-history";
     }
@@ -78,6 +81,9 @@ public class UserController {
     @GetMapping("/applications")
     public String applications(Authentication authentication, Model model) {
         User user = userService.findByEmail(authentication.getName());
+        if (user == null) {
+            return "redirect:/petAdoption/user/login";
+        }
         model.addAttribute("applications", adoptionRequestService.getRequestsByUser(user.getId()));
         return "my-applications";
     }

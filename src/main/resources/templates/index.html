@@ -12,6 +12,7 @@
             margin: 0;
             padding: 0;
         }
+
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: #f6f8fb;
@@ -45,12 +46,13 @@
             color: #2d6a4f;
         }
 
-        /* Home page */
+        /* Main page */
         .page-container {
             display: flex;
             justify-content: center;
             padding: 60px 20px;
         }
+
         .home-card {
             width: 100%;
             max-width: 900px;
@@ -66,10 +68,6 @@
             margin-bottom: 10px;
         }
 
-        .welcome-message {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
         .subtitle {
             color: #777;
             margin-bottom: 35px;
@@ -95,6 +93,7 @@
             transform: translateY(-3px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
         }
+
         .action-card h3 {
             color: #2d6a4f;
             margin-bottom: 8px;
@@ -105,23 +104,6 @@
             font-size: 14px;
         }
 
-        .logout-form {
-            margin-top: 35px;
-        }
-
-        .logout-button {
-            background: #2d6a4f;
-            color: white;
-            border: none;
-            padding: 13px 28px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .logout-button:hover {
-            background: #22543d;
-        }
         footer {
             text-align: center;
             padding: 25px;
@@ -141,6 +123,7 @@
             .home-card {
                 padding: 25px;
             }
+
             .home-actions {
                 grid-template-columns: 1fr;
             }
@@ -151,15 +134,20 @@
 <body>
 
 <nav class="navbar">
-    <div class="logo">PetAdoption</div>
+
+    <div class="logo">
+        PetAdoption
+    </div>
 
     <div class="nav-links">
-        <a th:href="@{/petAdoption/user/}">Home</a>
+        <a th:href="@{/}">Home</a>
         <a th:href="@{/pets}">Pets</a>
-        <a th:href="@{/petAdoption/user/applications}">My Applications</a>
-        <a th:href="@{/petAdoption/user/history}">History</a>
+        <a th:href="@{/petAdoption/user/login}">Login</a>
+        <a th:href="@{/petAdoption/user/register}">Register</a>
     </div>
+
 </nav>
+
 
 <div class="page-container">
 
@@ -167,49 +155,59 @@
 
         <h1>Welcome to PetAdoption</h1>
 
-        <p class="welcome-message">
-            Hello,
-            <strong th:text="${user.fullName}">User</strong>!
-        </p>
-
         <p class="subtitle">
-            Find your new companion and manage your adoption journey.
+            Find your new companion and give a pet a loving home.
         </p>
 
         <div class="home-actions">
 
-            <a class="action-card" th:href="@{/pets}">
+            <!-- Browse pets -->
+            <a class="action-card"
+               th:href="@{/pets}">
+
                 <h3>Browse Pets</h3>
-                <p>View available pets looking for a new home.</p>
+
+                <p>
+                    View available pets looking for
+                    a loving new home.
+                </p>
+
             </a>
 
+
+            <!-- Login -->
             <a class="action-card"
-               th:href="@{/petAdoption/user/applications}">
-                <h3>My Applications</h3>
-                <p>Check the status of your adoption applications.</p>
+               th:href="@{/petAdoption/user/login}">
+
+                <h3>Login</h3>
+
+                <p>
+                    Login to submit and manage
+                    your adoption applications.
+                </p>
+
             </a>
 
+
+            <!-- Register -->
             <a class="action-card"
-               th:href="@{/petAdoption/user/history}">
-                <h3>Adoption History</h3>
-                <p>View your completed adoption history.</p>
+               th:href="@{/petAdoption/user/register}">
+
+                <h3>Register</h3>
+
+                <p>
+                    Create an account and begin
+                    your adoption journey.
+                </p>
+
             </a>
 
         </div>
 
-        <form class="logout-form"
-              th:action="@{/logout}"
-              method="post">
-
-            <button class="logout-button" type="submit">
-                Logout
-            </button>
-
-        </form>
-
     </div>
 
 </div>
+
 
 <footer>
     PetAdoption
