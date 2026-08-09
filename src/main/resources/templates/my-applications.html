@@ -90,21 +90,21 @@
 
                 <tbody>
 
-                <tr th:each="application : ${applications}">
+                <tr th:each="app : ${applications}">
 
-                    <td th:text="${application.id}">
+                    <td th:text="${app.id}">
                         1
                     </td>
 
-                    <td th:text="${application.pet.name}">
+                    <td th:text="${app.pet.name}">
                         Pet Name
                     </td>
 
-                    <td th:text="${application.pet.species}">
+                    <td th:text="${app.pet.species}">
                         Dog
                     </td>
 
-                    <td th:text="${application.pet.breed}">
+                    <td th:text="${app.pet.breed}">
                         Labrador
                     </td>
 
@@ -114,17 +114,17 @@
                         Date
                     </td>
 
-                    <td th:text="${application.homeType}">
+                    <td th:text="${app.homeType}">
                         House
                     </td>
 
-                    <td th:text="${application.hasOtherPets ? 'Yes' : 'No'}">
+                    <td th:text="${app.hasOtherPets ? 'Yes' : 'No'}">
                         No
                     </td>
 
                     <td>
-                <span th:text="${application.status}"
-                      th:class="${application.status.name()}">
+                <span th:text="${app.status}"
+                      th:class="${app.status.name()}">
                     PENDING
                 </span>
                     </td>
