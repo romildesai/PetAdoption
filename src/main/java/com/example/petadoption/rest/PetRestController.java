@@ -19,7 +19,7 @@ public class PetRestController {
 
     private final PetService petService;
 
-    public PetRESTController(
+    public PetRestController(
             PetService petService) {
 
         this.petService = petService;
