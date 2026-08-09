@@ -1,96 +1,124 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Adoption - Admin</title>
 
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
+
 <body>
+
 <div th:replace="~{navbar :: navbar}"></div>
 
-<h1>Admin - Adoption Requests</h1>
 
-<!-- Flash messages -->
-<div th:if="${successMessage}" style="color:green;" th:text="${successMessage}"></div>
-<div th:if="${errorMessage}" style="color:red;" th:text="${errorMessage}"></div>
+<div class="content-wrapper">
+    <div class="admin-container">
 
-<p>
-    <a href="/petAdoption/admin/adoptionRequest">All Requests</a> |
-    <a href="/petAdoption/admin/pendingAdoptionRequest">Pending Requests</a> |
-    <a href="/petAdoption/admin/adoption/history">Adoption History</a>
-</p>
+        <div class="admin-header">
+            <h1>Admin - Adoption Requests</h1>
 
-<!-- All requests table -->
-<table th:if="${viewRequest}" border="1">
-    <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Pet</th>
-        <th>Status</th>
-        <th>Date</th>
-        <th>Action</th>
-    </tr>
-    <tr th:each="req : ${viewRequest}">
-        <td th:text="${req.id}"></td>
-        <td th:text="${req.user.email}"></td>
-        <td th:text="${req.pet.name}"></td>
-        <td th:text="${req.status}"></td>
-        <td th:text="${req.requestDate}"></td>
-        <td>
-            <form th:if="${req.status.name() == 'PENDING'}"
-                  th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}"
-                  method="post" style="display:inline;">
-                <button type="submit">Approve</button>
-            </form>
-            <form th:if="${req.status.name() == 'PENDING'}"
-                  th:action="@{/petAdoption/admin/adoptionRequest/{id}/reject(id=${req.id})}"
-                  method="post" style="display:inline;">
-                <button type="submit">Reject</button>
-            </form>
-        </td>
-    </tr>
-</table>
 
-<!-- Pending requests table (same structure) -->
-<table th:if="${viewPendingRequest}" border="1">
-    <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Pet</th>
-        <th>Date</th>
-        <th>Action</th>
-    </tr>
-    <tr th:each="req : ${viewPendingRequest}">
-        <td th:text="${req.id}"></td>
-        <td th:text="${req.user.email}"></td>
-        <td th:text="${req.pet.name}"></td>
-        <td th:text="${req.requestDate}"></td>
-        <td>
-            <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}" method="post"
-                  style="display:inline;">
-                <button type="submit">Approve</button>
-            </form>
-            <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/reject(id=${req.id})}" method="post"
-                  style="display:inline;">
-                <button type="submit">Reject</button>
-            </form>
-        </td>
-    </tr>
-</table>
+            <div class="admin-tabs">
+                <a th:href="@{/petAdoption/admin/adoptionRequest}" class="tab-btn">All Requests</a>
+                <a th:href="@{/petAdoption/admin/pendingAdoptionRequest}" class="tab-btn">Pending Requests</a>
+                <a th:href="@{/petAdoption/admin/adoption/history}" class="tab-btn">Adoption History</a>
+            </div>
+        </div>
 
-<!-- Single request by id -->
-<div th:if="${viewRequestById}">
-    <p>ID: <span th:text="${viewRequestById.id}"></span></p>
-    <p>Status: <span th:text="${viewRequestById.status}"></span></p>
-    <p>Reason: <span th:text="${viewRequestById.reasonForAdoption}"></span></p>
+        <!-- Alert messages -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <!-- requests table -->
+        <div class="table-card" th:if="${viewRequest}">
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Pet</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="req : ${viewRequest}">
+                    <td th:text="${req.id}"></td>
+                    <td th:text="${req.user.email}"></td>
+                    <td th:text="${req.pet.name}"></td>
+                    <td>
+                        <span class="status-badge"
+                              th:classappend="${req.status.name() == 'APPROVED' ? 'status-approved' : (req.status.name() == 'REJECTED' ? 'status-rejected' : 'status-pending')}"
+                              th:text="${req.status}">
+                        </span>
+                    </td>
+                    <td th:text="${req.requestDate}"></td>
+                    <td class="action-buttons">
+                        <form th:if="${req.status.name() == 'PENDING'}"
+                              th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}"
+                              method="post">
+                            <button type="submit" class="btn btn-approve">Approve</button>
+                        </form>
+                        <form th:if="${req.status.name() == 'PENDING'}"
+                              th:action="@{/petAdoption/admin/adoptionRequest/{id}/reject(id=${req.id})}"
+                              method="post">
+                            <button type="submit" class="btn btn-reject">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pending table -->
+        <div class="table-card" th:if="${viewPendingRequest}">
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Pet</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="req : ${viewPendingRequest}">
+                    <td th:text="${req.id}"></td>
+                    <td th:text="${req.user.email}"></td>
+                    <td th:text="${req.pet.name}"></td>
+                    <td th:text="${req.requestDate}"></td>
+                    <td class="action-buttons">
+                        <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}"
+                              method="post">
+                            <button type="submit" class="btn btn-approve">Approve</button>
+                        </form>
+                        <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/reject(id=${req.id})}" method="post">
+                            <button type="submit" class="btn btn-reject">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Single request by id -->
+        <div class="detail-card" th:if="${viewRequestById}">
+            <h3>Request Details</h3>
+            <div class="detail-item"><strong>ID:</strong> <span th:text="${viewRequestById.id}"></span></div>
+            <div class="detail-item"><strong>Status:</strong> <span th:text="${viewRequestById.status}"></span></div>
+            <div class="detail-item"><strong>Reason:</strong> <span
+                    th:text="${viewRequestById.reasonForAdoption}"></span></div>
+        </div>
+
+    </div>
 </div>
 
-<footer>
-    <div th:replace="~{footer :: footer}"></div>
-</footer>
+<div th:replace="~{footer :: footer}"></div>
 
 </body>
 </html>
