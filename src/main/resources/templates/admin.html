@@ -11,7 +11,17 @@
 
 <body>
 
-<div th:replace="~{navbar :: navbar}"></div>
+<nav class="navbar" th:fragment="navbar">
+    <div class="logo">PetAdoption</div>
+
+    <div class="nav-links">
+        <a th:href="@{/petAdoption/admin/}">Home</a>
+        <a th:href="@{/pets}">Pets</a>
+        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/applications(userId=1)}">My Applications</a>
+        <a th:unless="${#authorization.expression('hasRole(''USER'')')}" th:href="@{/petAdoption/admin/adoptionRequest}">Adoption Requests</a>
+        <a th:href="@{/petAdoption/admin/adoption/history}">History</a>
+    </div>
+</nav>
 
 
 <div class="content-wrapper">
