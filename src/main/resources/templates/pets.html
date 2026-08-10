@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Available Pets</title>
@@ -102,6 +101,27 @@
             align-items: center;     /* Centers content vertically */
         }
 
+        #cardBtn{
+            width:85%;
+            background:#28282b;
+            color:white;
+            border:none;
+            padding:14px;
+            border-radius:8px;
+            font-size:16px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:.25s;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center; /* Centers content horizontally */
+            align-items: center;
+        }
+
+        #cardBtn:hover{
+            background:#145a1f;
+
+        }
 
         .search-button:hover{
             background:#145a1f;
@@ -147,13 +167,21 @@
 
         .pet-card a:hover {
             background:#145a1f;
-
+            border-width: 2px;
+            border-color: #2d6a4f;
         }
 
         h1 {
             color: #2d6a4f;
             margin-bottom: 10px;
         }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
     </style>
 
 
@@ -183,9 +211,8 @@
            th:href="@{/petAdoption/user/register}">
             Register
         </a>
-        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/applications(userId=1)}">My Applications</a>
-        <a th:unless="${#authorization.expression('hasRole(''USER'')')}" th:href="@{/petAdoption/admin/adoptionRequest}">Adoption Requests</a>
-        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/history}">History</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/applications/(userId=${userId})}">My Applications</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/history}">History</a>
     </div>
 </nav>
 
@@ -266,7 +293,7 @@
                 <span th:text="${pet.gender}"></span>
             </p>
 
-            <a th:href="@{/pets/{id}(id=${pet.id})}">
+            <a th:href="@{/pets/{id}(id=${pet.id})}" id="cardBtn">
                 View Details
             </a>
 
@@ -280,6 +307,10 @@
     </p>
 
 </div>
+
+<footer>
+    <p>© 2026 Pet Adoption. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
