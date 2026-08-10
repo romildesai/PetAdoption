@@ -160,14 +160,14 @@
 
 <nav class="navbar">
     <div class="logo">
-        🐾 Pet Adoption
+        Pet Adoption
     </div>
 
     <div class="nav-links">
         <a th:href="@{/petAdoption/user/}">Home</a>
         <a th:href="@{/pets}">Pets</a>
         <a th:href="@{/petAdoption/user/applications}">My Applications</a>
-        <a th:href="@{/petAdoption/user/history}">History</a>
+        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/history}">History</a>
     </div>
 </nav>
 
