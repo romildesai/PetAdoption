@@ -1,9 +1,12 @@
 package com.example.petadoption.controller;
 
+import com.example.petadoption.model.User;
 import com.example.petadoption.service.AdoptionHistoryService;
 import com.example.petadoption.service.AdoptionRequestService;
+import com.example.petadoption.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,8 @@ public class AdminController {
     private AdoptionRequestService adoptionRequestService;
     @Autowired
     private AdoptionHistoryService adoptionHistoryService;
+    @Autowired
+    private UserService userService;
 
     //all adoption requests
     @GetMapping("/adoptionRequest")
@@ -72,6 +77,14 @@ public class AdminController {
     public String viewAdoptionHistory(@PathVariable Long id ,Model m){
         m.addAttribute("viewAdoptionHistory", adoptionHistoryService.getHistoryById(id));
         return "adoption-history";
+    }
+
+    //view admin-home page
+    @GetMapping("/")
+    public String adminHome(Model m, Authentication auth){
+        User user = userService.findByEmail(auth.getName());
+        m.addAttribute("user", user);
+        return "admin-home";
     }
 
 

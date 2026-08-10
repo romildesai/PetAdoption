@@ -75,7 +75,7 @@ public class SecurityConfig {
 
                             if (isAdmin) {
                                 response.sendRedirect(
-                                        "/petAdoption/admin/adoptionRequest");
+                                        "/petAdoption/admin/");
                             } else {
                                 response.sendRedirect(
                                         "/petAdoption/user/");
