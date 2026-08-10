@@ -3,7 +3,6 @@ package com.example.petadoption.service;
 import com.example.petadoption.model.Pet;
 import com.example.petadoption.model.PetStatus;
 import com.example.petadoption.repository.PetRepository;
-import com.fasterxml.jackson.databind.JsonNode;
 //import tools.jackson.databind.JsonNode;
 
 import tools.jackson.databind.JsonNode;
