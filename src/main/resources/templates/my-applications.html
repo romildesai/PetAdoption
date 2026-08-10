@@ -4,40 +4,12 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Adoption Applications</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            padding: 30px;
-        }
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #dddddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #212529;
-            color: white;
-        }
 
         .success-message {
             color: #155724;
@@ -76,93 +48,103 @@
 </head>
 
 <body>
+<div th:replace="~{navbar :: navbar}"></div>
 
-<div class="container">
 
-    <h1>My Adoption Applications</h1>
+<div class="content-wrapper">
+    <div class="admin-container">
 
-    <div class="success-message"
-         th:if="${successMessage}"
-         th:text="${successMessage}">
-    </div>
+        <div class="admin-header">
 
-    <div class="error-message"
-         th:if="${errorMessage}"
-         th:text="${errorMessage}">
-    </div>
 
-    <p th:if="${#lists.isEmpty(applications)}">
-        You have not submitted any adoption applications.
-    </p>
+            <h1>My Adoption Applications</h1>
 
-    <table th:unless="${#lists.isEmpty(applications)}">
+            <div class="success-message"
+                 th:if="${successMessage}"
+                 th:text="${successMessage}">
+            </div>
 
-        <thead>
-        <tr>
-            <th>Application ID</th>
-            <th>Pet Name</th>
-            <th>Species</th>
-            <th>Breed</th>
-            <th>Request Date</th>
-            <th>Home Type</th>
-            <th>Other Pets</th>
-            <th>Status</th>
-        </tr>
-        </thead>
+            <div class="error-message"
+                 th:if="${errorMessage}"
+                 th:text="${errorMessage}">
+            </div>
 
-        <tbody>
+            <p th:if="${#lists.isEmpty(applications)}">
+                You have not submitted any adoption applications.
+            </p>
 
-        <tr th:each="application : ${applications}">
+            <table th:unless="${#lists.isEmpty(applications)}">
 
-            <td th:text="${application.id}">
-                1
-            </td>
+                <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Pet Name</th>
+                    <th>Species</th>
+                    <th>Breed</th>
+                    <th>Request Date</th>
+                    <th>Home Type</th>
+                    <th>Other Pets</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
 
-            <td th:text="${application.pet.name}">
-                Pet Name
-            </td>
+                <tbody>
 
-            <td th:text="${application.pet.species}">
-                Dog
-            </td>
+                <tr th:each="application : ${applications}">
 
-            <td th:text="${application.pet.breed}">
-                Labrador
-            </td>
+                    <td th:text="${application.id}">
+                        1
+                    </td>
 
-            <td th:text="${#temporals.format(
+                    <td th:text="${application.pet.name}">
+                        Pet Name
+                    </td>
+
+                    <td th:text="${application.pet.species}">
+                        Dog
+                    </td>
+
+                    <td th:text="${application.pet.breed}">
+                        Labrador
+                    </td>
+
+                    <td th:text="${#temporals.format(
                     application.requestDate,
                     'MMM dd, yyyy HH:mm')}">
-                Date
-            </td>
+                        Date
+                    </td>
 
-            <td th:text="${application.homeType}">
-                House
-            </td>
+                    <td th:text="${application.homeType}">
+                        House
+                    </td>
 
-            <td th:text="${application.hasOtherPets ? 'Yes' : 'No'}">
-                No
-            </td>
+                    <td th:text="${application.hasOtherPets ? 'Yes' : 'No'}">
+                        No
+                    </td>
 
-            <td>
+                    <td>
                 <span th:text="${application.status}"
                       th:class="${application.status.name()}">
                     PENDING
                 </span>
-            </td>
+                    </td>
 
-        </tr>
+                </tr>
 
-        </tbody>
+                </tbody>
 
-    </table>
+            </table>
 
-    <a class="back-link"
-       th:href="@{/pets}">
-        Browse More Pets
-    </a>
 
+        </div>
+        <a class="tab-btn"
+           th:href="@{/pets}">
+            Browse More Pets
+        </a>
+    </div>
 </div>
+
+<div th:replace="~{footer :: footer}"></div>
 
 </body>
 </html>

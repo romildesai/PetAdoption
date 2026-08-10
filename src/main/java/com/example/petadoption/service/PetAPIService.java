@@ -6,6 +6,7 @@ import com.example.petadoption.repository.PetRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 //import tools.jackson.databind.JsonNode;
 
+import tools.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
