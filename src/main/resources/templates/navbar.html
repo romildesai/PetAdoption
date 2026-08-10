@@ -15,7 +15,7 @@
     <div class="nav-links">
         <a th:href="@{/petAdoption/user/}">Home</a>
         <a th:href="@{/pets}">Pets</a>
-        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/applications}">My Applications</a>
+        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/applications(userId=1)}">My Applications</a>
         <a th:href="@{/petAdoption/user/history}">History</a>
     </div>
 </nav>
