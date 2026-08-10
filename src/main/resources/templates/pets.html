@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Available Pets</title>
@@ -182,8 +183,9 @@
            th:href="@{/petAdoption/user/register}">
             Register
         </a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/applications/(userId=${userId})}">My Applications</a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/history}">History</a>
+        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/applications(userId=1)}">My Applications</a>
+        <a th:unless="${#authorization.expression('hasRole(''USER'')')}" th:href="@{/petAdoption/admin/adoptionRequest}">Adoption Requests</a>
+        <a th:href="@{/petAdoption/user/history}">History</a>
     </div>
 </nav>
 
