@@ -313,6 +313,31 @@ footer {
     font-size: 15px;
 }
 
+.detail-card .detail-item {
+    margin-bottom: 8px;
+}
+
+.detail-card hr {
+    margin: 16px 0;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+.detail-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.detail-footer .action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+
+
+
 @media (max-width: 650px) {
     .navbar {
         padding: 15px 20px;
