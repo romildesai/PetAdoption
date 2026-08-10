@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Available Pets</title>
@@ -193,37 +195,51 @@
     <div class="logo">🐾 PetAdoption</div>
 
     <div class="nav-links">
+
+        <!-- Visitor -->
         <a sec:authorize="isAnonymous()"
            th:href="@{/}">
             Home
         </a>
-        <a sec:authorize="isAuthenticated()"
+
+        <!-- USER only -->
+        <a sec:authorize="hasRole('USER')"
            th:href="@{/petAdoption/user/}">
             Home
         </a>
 
-        <a th:href="@{/pets}">Pets</a>
-        <a sec:authorize="isAnonymous()"
-           th:href="@{/petAdoption/user/login}">
-            Login
+        <!-- ADMIN only -->
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/petAdoption/admin/}">
+            Home
         </a>
-        <a sec:authorize="isAnonymous()"
-           th:href="@{/petAdoption/user/register}">
-            Register
+
+        <!-- USER only -->
+        <a sec:authorize="hasRole('USER')"
+           th:href="@{/petAdoption/user/applications}">
+            My Applications
         </a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/applications/(userId=${userId})}">My Applications</a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/history}">History</a>
+
+        <!-- ADMIN only -->
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/petAdoption/admin/adoptionRequest}">
+            Adoption Requests
+        </a>
+
+        <!-- USER only -->
+        <a sec:authorize="hasRole('USER')"
+           th:href="@{/user/history}">
+            History
+        </a>
+
+        <!-- ADMIN only -->
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/petAdoption/admin/adoption/history}">
+            History
+        </a>
+
     </div>
 </nav>
-
-<!--<div class="navbar">-->
-<!--    <a th:href="@{/petAdoption/user/}">Home</a>-->
-<!--    <a th:href="@{/pets}">Pets</a>-->
-<!--    <a th:href="@{/petAdoption/user/applications}">My Applications</a>-->
-<!--    <a th:href="@{/petAdoption/user/history}">History</a>-->
-<!--</div>-->
-
-
 
 <div class="container">
     <br>
