@@ -182,8 +182,8 @@
            th:href="@{/petAdoption/user/register}">
             Register
         </a>
-        <a th:href="@{/petAdoption/user/applications}">My Applications</a>
-        <a th:href="@{/petAdoption/user/history}">History</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/applications/(userId=${userId})}">My Applications</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/petAdoption/user/history}">History</a>
     </div>
 </nav>
 
