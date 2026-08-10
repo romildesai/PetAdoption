@@ -41,6 +41,7 @@
                     <th>Pet</th>
                     <th>Status</th>
                     <th>Date</th>
+                    <th>Details</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -56,6 +57,9 @@
                         </span>
                     </td>
                     <td th:text="${req.requestDate}"></td>
+                    <td>
+                        <a class="tab-btn" th:href="@{/petAdoption/admin/adoptionRequest/{id}(id=${req.id})}">View</a>
+                    </td>
                     <td class="action-buttons">
                         <form th:if="${req.status.name() == 'PENDING'}"
                               th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}"
@@ -82,6 +86,7 @@
                     <th>User</th>
                     <th>Pet</th>
                     <th>Date</th>
+                    <th>Details</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -91,6 +96,9 @@
                     <td th:text="${req.user.email}"></td>
                     <td th:text="${req.pet.name}"></td>
                     <td th:text="${req.requestDate}"></td>
+                    <td>
+                        <a class="tab-btn" th:href="@{/petAdoption/admin/adoptionRequest/{id}(id=${req.id})}">View</a>
+                    </td>
                     <td class="action-buttons">
                         <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${req.id})}"
                               method="post">
@@ -108,10 +116,53 @@
         <!-- Single request by id -->
         <div class="detail-card" th:if="${viewRequestById}">
             <h3>Request Details</h3>
-            <div class="detail-item"><strong>ID:</strong> <span th:text="${viewRequestById.id}"></span></div>
+
+            <div class="detail-item"><strong>Application ID:</strong> <span th:text="${viewRequestById.id}"></span>
+            </div>
             <div class="detail-item"><strong>Status:</strong> <span th:text="${viewRequestById.status}"></span></div>
-            <div class="detail-item"><strong>Reason:</strong> <span
+            <div class="detail-item"><strong>Request Date:</strong> <span
+                    th:text="${#temporals.format(viewRequestById.requestDate, 'MMM dd, yyyy HH:mm')}"></span></div>
+
+            <hr>
+
+            <div class="detail-item"><strong>Applicant Name:</strong> <span
+                    th:text="${viewRequestById.user.fullName}"></span></div>
+            <div class="detail-item"><strong>Applicant Email:</strong> <span
+                    th:text="${viewRequestById.user.email}"></span></div>
+
+            <hr>
+
+            <div class="detail-item"><strong>Pet Name:</strong> <span th:text="${viewRequestById.pet.name}"></span>
+            </div>
+            <div class="detail-item"><strong>Species:</strong> <span th:text="${viewRequestById.pet.species}"></span>
+            </div>
+            <div class="detail-item"><strong>Breed:</strong> <span th:text="${viewRequestById.pet.breed}"></span></div>
+
+            <hr>
+
+            <div class="detail-item"><strong>Reason for Adoption:</strong> <span
                     th:text="${viewRequestById.reasonForAdoption}"></span></div>
+            <div class="detail-item"><strong>Home Type:</strong> <span th:text="${viewRequestById.homeType}"></span>
+            </div>
+            <div class="detail-item"><strong>Has Other Pets:</strong> <span
+                    th:text="${viewRequestById.hasOtherPets ? 'Yes' : 'No'}"></span></div>
+            <div class="detail-item"><strong>Experience with Pets:</strong> <span
+                    th:text="${viewRequestById.experienceWithPets}"></span></div>
+
+            <div class="detail-footer">
+                <a class="tab-btn" th:href="@{/petAdoption/admin/adoptionRequest}">← Back to All Requests</a>
+
+                <div class="action-buttons" th:if="${viewRequestById.status.name() == 'PENDING'}">
+                    <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/approve(id=${viewRequestById.id})}"
+                          method="post">
+                        <button type="submit" class="btn btn-approve">Approve</button>
+                    </form>
+                    <form th:action="@{/petAdoption/admin/adoptionRequest/{id}/reject(id=${viewRequestById.id})}"
+                          method="post">
+                        <button type="submit" class="btn btn-reject">Reject</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
     </div>
