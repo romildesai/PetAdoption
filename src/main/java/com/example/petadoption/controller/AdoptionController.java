@@ -2,12 +2,16 @@ package com.example.petadoption.controller;
 
 import com.example.petadoption.model.Pet;
 import com.example.petadoption.repository.PetRepository;
+import com.example.petadoption.repository.UserRepository;
 import com.example.petadoption.service.AdoptionHistoryService;
 import com.example.petadoption.service.AdoptionRequestService;
+import com.example.petadoption.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.example.petadoption.model.User;
 
 @Controller
 public class AdoptionController {
@@ -19,11 +23,13 @@ public class AdoptionController {
             adoptionHistoryService;
 
     private final PetRepository petRepository;
+    private final UserService userService;
 
     public AdoptionController(
             AdoptionRequestService adoptionRequestService,
             AdoptionHistoryService adoptionHistoryService,
-            PetRepository petRepository
+            PetRepository petRepository,
+            UserService userService
     ) {
         this.adoptionRequestService =
                 adoptionRequestService;
@@ -32,6 +38,8 @@ public class AdoptionController {
                 adoptionHistoryService;
 
         this.petRepository = petRepository;
+
+        this.userService = userService;
     }
 
     /*
@@ -43,6 +51,7 @@ public class AdoptionController {
     @GetMapping("/adoptions/new/{petId}")
     public String showAdoptionForm(
             @PathVariable Long petId,
+            Authentication authentication,
             Model model
     ) {
         Pet pet = petRepository.findById(petId)
@@ -52,7 +61,10 @@ public class AdoptionController {
                         )
                 );
 
+        User user = userService.findByEmail(authentication.getName());
+
         model.addAttribute("pet", pet);
+        model.addAttribute("user", user);
 
         return "adoption-form";
     }
