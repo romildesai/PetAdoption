@@ -5,23 +5,44 @@
     <title>Available Pets</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
-            background-color: #f5f5f5;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f6f8fb;
+            color: #333;
         }
 
+        /* Navigation bar */
         .navbar {
-            background-color: #333;
-            color: white;
-            padding: 15px 30px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin-right: 20px;
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #2d6a4f;
         }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            margin-left: 25px;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #2d6a4f;
+        }
+
 
         .container {
             width: 90%;
@@ -32,21 +53,57 @@
             text-align: center;
         }
 
-        .search-box {
-            background: white;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 8px;
+        .form-group{
+            margin-bottom:20px;
         }
 
-        .search-box input {
-            padding: 10px;
-            margin: 5px;
+        .search-box label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:bold;
         }
 
-        .search-box button {
-            padding: 10px 20px;
-            cursor: pointer;
+        .search-box input{
+            width:20%;
+            padding:13px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            font-size:15px;
+        }
+        .search-box form {
+            display: flex;
+            flex-direction: row;
+            align-items: center; /* Vertically centers labels, inputs, and buttons */
+            gap: 10px;           /* Puts a clean 10px space between every item */
+            flex-wrap: nowrap;
+            margin-left: 20px;
+            /* Strictly forbids items from breaking to a new line */
+        }
+        .search-box input:focus{
+            outline:none;
+            border-color:#1b5e20;
+            box-shadow:0 0 0 3px rgba(27,94,32,.15);
+        }
+        .search-button{
+            width:10%;
+            background:#28282b;
+            color:white;
+            border:none;
+            padding:14px;
+            border-radius:8px;
+            font-size:16px;
+            cursor:pointer;
+            font-weight:bold;
+            transition:.25s;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center; /* Centers content horizontally */
+            align-items: center;     /* Centers content vertically */
+        }
+
+
+        .search-button:hover{
+            background:#145a1f;
         }
 
         .pets {
@@ -62,6 +119,12 @@
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .pet-card:hover {
+            /* Scale the card up by 5% (1.05) */
+            transform: scale(1.05);
         }
 
         .pet-card img {
@@ -80,10 +143,49 @@
             text-decoration: none;
             border-radius: 5px;
         }
+
+        .pet-card a:hover {
+            background:#145a1f;
+
+        }
+
+        h1 {
+            color: #2d6a4f;
+            margin-bottom: 10px;
+        }
     </style>
+
+
 </head>
 
 <body>
+
+<nav class="navbar">
+    <div class="logo">PetAdoption</div>
+
+    <div class="nav-links">
+        <a sec:authorize="isAnonymous()"
+           th:href="@{/}">
+            Home
+        </a>
+        <a sec:authorize="isAuthenticated()"
+           th:href="@{/petAdoption/user/}">
+            Home
+        </a>
+
+        <a th:href="@{/pets}">Pets</a>
+        <a sec:authorize="isAnonymous()"
+           th:href="@{/petAdoption/user/login}">
+            Login
+        </a>
+        <a sec:authorize="isAnonymous()"
+           th:href="@{/petAdoption/user/register}">
+            Register
+        </a>
+        <a th:href="@{/petAdoption/user/applications}">My Applications</a>
+        <a th:href="@{/petAdoption/user/history}">History</a>
+    </div>
+</nav>
 
 <!--<div class="navbar">-->
 <!--    <a th:href="@{/petAdoption/user/}">Home</a>-->
@@ -92,77 +194,45 @@
 <!--    <a th:href="@{/petAdoption/user/history}">History</a>-->
 <!--</div>-->
 
-<div class="navbar">
 
-    <!-- Visitor -->
-    <a sec:authorize="isAnonymous()"
-       th:href="@{/}">
-        Home
-    </a>
-
-    <!-- Logged-in user -->
-    <a sec:authorize="isAuthenticated()"
-       th:href="@{/petAdoption/user/}">
-        Home
-    </a>
-
-    <a th:href="@{/pets}">Pets</a>
-
-    <!-- Visitor links -->
-    <a sec:authorize="isAnonymous()"
-       th:href="@{/petAdoption/user/login}">
-        Login
-    </a>
-
-    <a sec:authorize="isAnonymous()"
-       th:href="@{/petAdoption/user/register}">
-        Register
-    </a>
-
-    <!-- Logged-in user links -->
-    <a sec:authorize="isAuthenticated()"
-       th:href="@{/petAdoption/user/applications}">
-        My Applications
-    </a>
-
-    <a sec:authorize="isAuthenticated()"
-       th:href="@{/petAdoption/user/history}">
-        History
-    </a>
-
-</div>
 
 <div class="container">
-
+    <br>
+    <br>
+    <br>
     <h1>Available Pets</h1>
-
+    <br>
+    <br>
+    <br>
     <div class="search-box">
 
         <form th:action="@{/pets/search}" method="get">
-
+            <label>Species</label>
             <input type="text"
                    name="species"
-                   placeholder="Species"
                    th:value="${species}">
 
+            <label>Breed</label>
             <input type="text"
                    name="breed"
-                   placeholder="Breed"
                    th:value="${breed}">
 
+            <label>Age</label>
             <input type="number"
                    name="age"
-                   placeholder="Age"
                    th:value="${age}">
 
-            <button type="submit">Search</button>
+            <button class="search-button" type="submit">Search</button>
 
-            <a th:href="@{/pets}">Clear</a>
+            <a th:href="@{/pets}" class="search-button">Clear</a>
+
 
         </form>
 
     </div>
-
+    <br>
+    <br>
+    <br>
     <div class="pets">
 
         <div class="pet-card"
