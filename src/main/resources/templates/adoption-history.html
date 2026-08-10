@@ -8,12 +8,40 @@
     <link rel="stylesheet" th:href="@{/style.css}">
 
 </head>
+<style>
+    .container {
+        max-width: 1400px;
+        margin: auto;
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    th {
+        background-color: #2d6a4f;
+        color: white;
+    }
+</style>
 
 <body>
 
 <div th:replace="~{navbar :: navbar}"></div>
 
-<div class="content-wrapper">
+<div class="container">
 
     <div class="admin-container">
         <div class="admin-header">
