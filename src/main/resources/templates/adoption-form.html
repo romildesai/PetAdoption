@@ -251,7 +251,14 @@
     </div>
 
     <div class="nav-links">
-        <a th:href="@{/petAdoption/user}">Home</a>
+        <a sec:authorize="isAnonymous()"
+           th:href="@{/}">
+            Home
+        </a>
+        <a sec:authorize="isAuthenticated()"
+           th:href="@{/petAdoption/user/}">
+            Home
+        </a>
         <a th:href="@{/pets}">Available Pets</a>
     </div>
 </nav>
