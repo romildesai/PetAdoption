@@ -39,20 +39,7 @@
 
 <body>
 
-<nav class="navbar" th:fragment="navbar">
-    <div class="logo">
-        🐾 Pet Adoption
-    </div>
-
-    <div class="nav-links">
-        <a th:href="@{/petAdoption/admin/}">Home</a>
-        <a th:href="@{/pets}">Pets</a>
-        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/petAdoption/user/applications(userId=1)}">My Applications</a>
-        <a th:unless="${#authorization.expression('hasRole(''USER'')')}" th:href="@{/petAdoption/admin/adoptionRequest}">Adoption Requests</a>
-        <a th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/user/history}">History</a>
-        <a th:unless="${#authorization.expression('hasRole(''USER'')')}" th:href="@{/petAdoption/admin/adoption/history}">History</a>
-    </div>
-</nav>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <div class="container">
 
@@ -61,21 +48,21 @@
 
 
             <div class="admin-header">
-                <h1>Admin - Adoption History</h1>
+                <h1>Adoption History</h1>
 
-                <div class="admin-tabs">
-                    <a th:href="@{/petAdoption/admin/adoptionRequest}" class="tab-btn">All Requests</a>
-                    <a th:href="@{/petAdoption/admin/pendingAdoptionRequest}" class="tab-btn">Pending Requests</a>
-                    <a th:href="@{/petAdoption/admin/adoption/history}" class="tab-btn">Adoption History</a>
-                </div>
+                <!--                <div class="admin-tabs">-->
+                <!--                    <a th:href="@{/petAdoption/admin/adoptionRequest}" class="tab-btn">All Requests</a>-->
+                <!--                    <a th:href="@{/petAdoption/admin/pendingAdoptionRequest}" class="tab-btn">Pending Requests</a>-->
+                <!--                    <a th:href="@{/petAdoption/admin/adoption/history}" class="tab-btn">Adoption History</a>-->
+                <!--                </div>-->
             </div>
 
-            <p th:if="${#lists.isEmpty(viewAdoptionHistory)}">
+            <p th:if="${#lists.isEmpty(history)}">
                 No completed adoption records were found.
             </p>
 
             <div class="table-card">
-                <table class="styled-table" th:unless="${#lists.isEmpty(viewAdoptionHistory)}">
+                <table class="styled-table" th:unless="${#lists.isEmpty(history)}">
 
                     <thead>
                     <tr>
@@ -92,7 +79,7 @@
 
                     <tbody>
 
-                    <tr th:each="record : ${viewAdoptionHistory}">
+                    <tr th:each="record : ${history}">
 
                         <td th:text="${record.id}">
                             1

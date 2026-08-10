@@ -240,15 +240,16 @@ public class AdoptionController {
      */
     @GetMapping("/user/history")
     public String showUserAdoptionHistory(
-            @RequestParam Long userId,
+            Authentication authentication,
             Model model
     ) {
+        User user = userService.findByEmail(authentication.getName());
         model.addAttribute(
                 "history",
                 adoptionHistoryService
-                        .getHistoryByUser(userId)
+                        .getHistoryByUser(user.getId())
         );
-
-        return "adoption-history";
+        model.addAttribute("user", user);
+        return "user-adoption-history";
     }
 }
